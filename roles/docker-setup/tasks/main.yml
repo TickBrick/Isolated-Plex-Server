@@ -1,0 +1,45 @@
+---
+- include_tasks: setup-docker.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Install Docker.
+  become: true
+  package:
+    name: "{{ docker_package }}"
+    state: present
+  notify: restart docker
+
+- name: Add users to Docker group.
+  become: true
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  with_items: "{{ docker_users }}"
+
+- include_tasks: docker-compose.yml
+  when: install_compose
+
+- name: Test if Docker is running as expected
+  become: yes
+  command: "docker -v"
+
+- name: Test if Docker-Compose is running as expected
+  become: true
+  command: "docker-compose -v"
+
+# - name: Transfer Dockerfile to host
+#   become: true
+#   copy:
+#     src: "~/ANIS/roles/docker-setup/files/Dockerfile"
+#     dest: /tmp/Dockerfile
+
+- name: Transfer docker-compose.yml to host
+  become: true
+  copy:
+    src: "~/ANIS/roles/docker-setup/files/docker-compose.yml"
+    dest: /tmp/docker-compose.yml
+
+- name: Go to the folder and execute command
+  become: true
+  command: chdir=/tmp/ docker-compose up

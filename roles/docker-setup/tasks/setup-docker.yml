@@ -1,0 +1,31 @@
+---
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install Docker dependencies.
+  become: true
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - apt-transport-https
+    - ca-certificates
+
+- name: Add Docker apt key.
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    state: present
+  register: add_repository_key
+  ignore_errors: true
+
+- name: Add Docker apt repo.
+  become: true
+  apt_repository:
+    repo: "{{ docker_repository }}"
+    state: present
+    update_cache: true

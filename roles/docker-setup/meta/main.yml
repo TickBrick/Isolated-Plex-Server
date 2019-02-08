@@ -1,0 +1,8 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: Ilija Dimitrovski
+  description: Ansible Role for installing docker-ce and docker-compose on Debian distributions.
+  license: "DWYW license (Do What You Want)"
+  min_ansible_version: 2.4

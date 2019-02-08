@@ -1,0 +1,7 @@
+---
+- name: Install Docker Compose 1.22.0.
+  become: true
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.22.0/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 0755

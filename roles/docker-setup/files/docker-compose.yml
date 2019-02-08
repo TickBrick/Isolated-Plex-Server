@@ -1,0 +1,25 @@
+---
+version: "2"
+services:
+  restic:
+    image: restic/restic
+    container_name: restic
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    network_mode: host
+    ports:
+     - "32400:32400"
+     - "32400:32400/udp"
+     - "32469:32469"
+     - "32469:32469/udp"
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - VERSION=docker
+    # volumes:
+    #   # - </path/to/library>:/config
+    #   # - <path/to/tvseries>:/data/tvshows
+    #   # - </path/to/movies>:/data/movies
+    #   # - </path for transcoding>:/transcode
+    restart: unless-stopped
